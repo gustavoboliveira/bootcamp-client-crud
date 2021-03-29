@@ -14,7 +14,7 @@ public class ClientDTO implements Serializable{
 	private Double income;
 	private Instant birthDate;
 	private Integer children;
-	
+		
 	public ClientDTO() {
 	}
 

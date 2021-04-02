@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bootcamp.clientcrud.dto.ClientDTO;
@@ -17,6 +18,7 @@ import com.bootcamp.clientcrud.repositories.ClientRepository;
 import com.bootcamp.clientcrud.services.exceptions.DatabaseException;
 import com.bootcamp.clientcrud.services.exceptions.ResourceNotFoundException;
 
+@Service
 public class ClientService {
 	
 	@Autowired
@@ -25,7 +27,7 @@ public class ClientService {
 	@Transactional(readOnly = true)
 	public Page<ClientDTO> findAllPaged(PageRequest pageRequest){
 		Page<Client> list = repository.findAll(pageRequest);
-		return list.map(client -> new ClientDTO(client));
+		return list.map(x -> new ClientDTO(x));
 	}
 	
 	@Transactional(readOnly = true)
@@ -58,9 +60,11 @@ public class ClientService {
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
-		} catch(EmptyResultDataAccessException e){
+		} 
+		catch(EmptyResultDataAccessException e){
 			throw new ResourceNotFoundException("Id not found " + id);
-		} catch(DataIntegrityViolationException e) {
+		} 
+		catch(DataIntegrityViolationException e) {
 			throw new DatabaseException("Integrity Violation");
 		}
 	}
